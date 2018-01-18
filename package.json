@@ -1,0 +1,43 @@
+{
+  "name": "kanbangular",
+  "version": "1.0.0",
+  "description": "Angular Kanban Board",
+  "private": true,
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lauragonzalezzz/kanbangular.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/lauragonzalezzz/kanbangular/issues"
+  },
+  "homepage": "https://github.com/lauragonzalezzz/kanbangular#readme",
+  "dependencies": {
+    "bcrypt": "^0.8.6",
+    "body-parser": "^1.15.0",
+    "dragula": "^3.6.8",
+    "express": "^4.13.4",
+    "express-session": "^1.13.0",
+    "moment": "^2.13.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "pg": "4.5.5",
+    "pg-hstore": "^2.3.2",
+    "sequelize": "^3.22.0"
+  },
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-nodemon": "^2.0.6",
+    "gulp-sass": "^2.3.1"
+  },
+  "engines": {
+    "node": "5.11.1",
+    "npm": "3.8.6"
+  }
+}
