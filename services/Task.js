@@ -22,6 +22,50 @@ class Task {
         return tasksArr;
       });
   }
+
+  create(data) {
+    return this._model.create({
+      title: data.title,
+      description: data.description,
+      dueDate: data.dueDate,
+      priority: data.priority,
+      status: data.status
+    })
+
+  }
+
+  update(data) {
+    return this._model.update({
+        title: data.title,
+        description: data.description,
+        dueDate: data.dueDate,
+        priority: data.priority,
+        status: data.status
+      },
+      {
+        where: {
+          id: data.id
+        }
+      })
+  }
+
+  changeStatus(title, newStatus) {
+    return this._model.update({
+      status : newStatus
+    }, {
+      where : {
+        title : title
+      }
+    })
+  }
+
+  delete(taskId) {
+    return this._model.destroy({
+      where: {
+        id: taskId
+      }
+    })
+  }
 }
 
 module.exports = Task;
