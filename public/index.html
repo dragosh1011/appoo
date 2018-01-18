@@ -13,34 +13,34 @@
   <div class="main">
     <header>
       <h1 id="mainHeading">Kanbangular</h1>
-      <div ng-controller="LoginController" class="loginNav">
-        <div>{{loginError}}</div>
-        <a href="" class="navButtons animBtn themeA" id="logIn" ng-click="loginButton=true" ng-hide="loginButton; initButton; registerButton">Log In</a>
-        <div>{{registerError}}</div>
-        <a href="" class="navButtons animBtn themeA" id="register" ng-click=" registerButton=true" ng-hide="registerButton; loginButton">Register</a>
-        <a href="" class="navButtons animBtn themeA" id="logout" ng-click="logout(); showLogout=true" ng-hide="logOutButton">Logout</a>
+      <div ng-controller="LoginController as $ctrl" class="loginNav">
+        <div>{{$ctrl.loginError}}</div>
+        <a href="" class="navButtons animBtn themeA" id="logIn" ng-click="$ctrl.loginButton=true" ng-show="!$ctrl.isLoggedIn">Log In</a>
+        <div>{{$ctrl.registerError}}</div>
+        <a href="" class="navButtons animBtn themeA" id="register" ng-click="$ctrl.registerButton=true" ng-show="!$ctrl.isLoggedIn">Register</a>
+        <a href="" class="navButtons animBtn themeA" id="logout" ng-click="$ctrl.logout(); $ctrl.showLogout=true" ng-show="$ctrl.isLoggedIn">Logout</a>
 
         <div id="loginForm">
-          <form ng-show="loginButton">
+          <form ng-show="$ctrl.loginButton">
             <label for="username">Username:</label>
-            <input type="text" id="username" ng-model="user.username">
+            <input type="text" ng-model="$ctrl.user.username">
             <br>
             <label for="password">Password:</label>
-            <input type="password" id="password" ng-model="user.password">
+            <input type="password" ng-model="$ctrl.user.password">
             <br>
-            <a href="" class="navButtons animBtn themeA" id="submit" ng-click="login(user); loginButton=false">Login</a>
+            <a href="" class="navButtons animBtn themeA" id="submit" ng-click="$ctrl.login($ctrl.user); $ctrl.loginButton=false">Login</a>
           </form>
         </div>
 
         <div id="registerForm">
-          <form ng-show="registerButton">
+          <form ng-show="$ctrl.registerButton">
             <label for="username">Username:</label>
-            <input type="text" id="username" ng-model="newUser.username">
+            <input type="text" id="username" ng-model="$ctrl.newUser.username">
             <br>
             <label for="password">Password:</label>
-            <input type="password" id="password" ng-model="newUser.password">
+            <input type="password" id="password" ng-model="$ctrl.newUser.password">
             <br>
-            <a href="" class="navButtons animBtn themeA" id="submit" ng-click="register(newUser); registerButton=false">Register</a>
+            <a href="" class="navButtons animBtn themeA" id="submit" ng-click="$ctrl.register($ctrl.newUser); $ctrl.registerButton=false">Register</a>
           </form>
         </div>
       </div> <!-- Ends LogIn Nav -->
