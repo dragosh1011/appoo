@@ -25,7 +25,7 @@ class TaskService {
   }
 
   updateStatus(updateObj) {
-    return $http.put('/api/status', updateObj);
+    return this.$http.put('/api/status', updateObj);
   }
 
 }
