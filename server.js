@@ -1,16 +1,20 @@
 'use strict';
 
-const express       = require('express'),
-      app           = express(),
-      bodyParser    = require('body-parser'),
-      path          = require('path'),
-      db            = require('./models'),
-      Tasks         = db.Task,
-      Users         = db.User,
-      passport      = require('passport'),
-      LocalStrategy = require('passport-local').Strategy,
-      session       = require('express-session'),
-      bcrypt        = require('bcrypt');
+const express = require('express'),
+  app = express(),
+  bodyParser = require('body-parser'),
+  path = require('path'),
+  db = require('./models'),
+  Tasks = db.Task,
+  Users = db.User,
+  passport = require('passport'),
+  LocalStrategy = require('passport-local').Strategy,
+  session = require('express-session'),
+  bcrypt = require('bcrypt'),
+  TaskService = require('./services/Task');
+
+
+const taskService = new TaskService(Tasks);
 
 var env       = process.env.NODE_ENV || 'development';
 
@@ -73,20 +77,9 @@ passport.deserializeUser((user, done) => {
 
 //GET
 app.get('/api/tasks', (req, res) => {
-  Tasks.findAll()
+  taskService.findAll()
   .then((tasks) => {
-    let tasksArr = [];
-    tasks.forEach((eachTask) =>{
-      tasksArr.push({
-        id: eachTask.id,
-        title : eachTask.title,
-        description : eachTask.description,
-        dueDate : eachTask.dueDate,
-        priority: eachTask.priority,
-        status: eachTask.status
-      });
-    });
-  res.json({tasks : tasksArr});
+  res.json({tasks});
   });
 });
 
@@ -106,19 +99,9 @@ app.post('/api/tasks', (req, res) => {
     status: req.body.status
   })
   .then(function(){
-    Tasks.findAll()
+    taskService.findAll()
     .then((tasks) => {
-      let tasksArr = [];
-      tasks.forEach((eachTask) =>{
-        tasksArr.push({
-          title : eachTask.title,
-          description : eachTask.description,
-          dueDate : eachTask.dueDate,
-          priority: eachTask.priority,
-          status: eachTask.status
-        });
-      });
-      res.json({tasks : tasks});
+      res.json({tasks});
     });
   });
 });
@@ -166,19 +149,9 @@ app.put('/api/tasks', (req, res) => {
    }
  })
   .then(function(){
-    Tasks.findAll()
+    taskService.findAll()
     .then((tasks) => {
-      let tasksArr = [];
-      tasks.forEach((eachTask) =>{
-        tasksArr.push({
-          title : eachTask.title,
-          description : eachTask.description,
-          dueDate : eachTask.dueDate,
-          priority: eachTask.priority,
-          status: eachTask.status
-        });
-      });
-      res.json({tasks : tasks});
+      res.json({tasks});
     });
   });
 });
@@ -192,19 +165,9 @@ app.put('/api/status', (req, res) => {
     }
   })
   .then(function(){
-    Tasks.findAll()
+    taskService.findAll()
     .then((tasks) => {
-      let tasksArr = [];
-      tasks.forEach((eachTask) =>{
-        tasksArr.push({
-          title : eachTask.title,
-          description : eachTask.description,
-          dueDate : eachTask.dueDate,
-          priority: eachTask.priority,
-          status: eachTask.status
-        });
-      });
-      res.json({tasks : tasks});
+      res.json({tasks});
     });
   });
 });
@@ -212,7 +175,7 @@ app.put('/api/status', (req, res) => {
 //DELETE
 app.delete('/api/tasks', (req, res) => {
   console.log(req.body.id);
-  Tasks.destroy({
+  taskService.destroy({
     where: {
       id : req.body.id
     }
@@ -220,18 +183,7 @@ app.delete('/api/tasks', (req, res) => {
   .then(function(){
     Tasks.findAll()
     .then((tasks) => {
-      let tasksArr = [];
-      tasks.forEach((eachTask) =>{
-        tasksArr.push({
-          id: eachTask.id,
-          title : eachTask.title,
-          description : eachTask.description,
-          dueDate : eachTask.dueDate,
-          priority: eachTask.priority,
-          status: eachTask.status
-        });
-      });
-      res.json({tasks : tasksArr});
+      res.json({tasks});
     });
   });
 });
