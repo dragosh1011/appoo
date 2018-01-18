@@ -11,35 +11,36 @@ class LoginController {
 
   login(user) {
     this.LoginService.login(user)
-          .then(function () {
-            alert("Successful Login");
-            Object.assign(user, {
-              username: "",
-              password: ""
-            });
-          })
-          .catch(function (err) {
-            this.loginError = "Invalid username or password";
-          });
+      .then(() => {
+        alert("Successful Login");
+        Object.assign(user, {
+          username: "",
+          password: ""
+        });
+      })
+      .catch((err) => {
+        this.loginError = "Invalid username or password";
+      });
   }
 
   register(newUser) {
-    if (newUser === undefined) {
+    console.log(newUser);
+    if (!newUser) {
       return this.registerError = "Please enter both username and password";
     }
     if (!newUser.username || !newUser.password) {
       return this.registerError = "Please try again";
     }
     else {
-      LoginService.register(newUser)
-        .then(function () {
+      this.LoginService.register(newUser)
+        .then(() => {
           alert("Successful Registration");
           Object.assign(newUser, {
             username: "",
             password: ""
           });
         })
-        .catch(function () {
+        .catch(() => {
           this.registerError = "Please try again";
         });
     };
@@ -51,4 +52,4 @@ class LoginController {
 }
 
 angular.module('app')
-    .controller("LoginController", ['LoginService', LoginController]);
+  .controller("LoginController", ['LoginService', LoginController]);

@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Kanbangular</title>
@@ -9,51 +10,61 @@
   <link href='https://fonts.googleapis.com/css?family=Open+Sans' rel='stylesheet' type='text/css'>
 </head>
 
-<body ng-app= "app">
+<body ng-app="app">
   <div class="main">
     <header>
-      <h1 id="mainHeading">Kanbangular</h1>
+      <h1 id="mainHeading">Kanban Mega Project Board</h1>
       <div ng-controller="LoginController as $ctrl" class="loginNav">
         <div>{{$ctrl.loginError}}</div>
-        <a href="" class="navButtons animBtn themeA" id="logIn" ng-click="$ctrl.loginButton=true" ng-show="!$ctrl.isLoggedIn">Log In</a>
+        <a href="" class="navButtons animBtn themeA" id="logIn" ng-click="$ctrl.loginButton=true; $ctrl.registerButton=false; $ctrl.showLogout=false"
+          ng-show="!$ctrl.isLoggedIn">Log In</a>
         <div>{{$ctrl.registerError}}</div>
-        <a href="" class="navButtons animBtn themeA" id="register" ng-click="$ctrl.registerButton=true" ng-show="!$ctrl.isLoggedIn">Register</a>
-        <a href="" class="navButtons animBtn themeA" id="logout" ng-click="$ctrl.logout(); $ctrl.showLogout=true" ng-show="$ctrl.isLoggedIn">Logout</a>
+        <a href="" class="navButtons animBtn themeA" id="register" ng-click="$ctrl.showLogout=false; $ctrl.loginButton=false; $ctrl.registerButton=true;"
+          ng-show="!$ctrl.isLoggedIn">Register</a>
+        <a href="" class="navButtons animBtn themeA" id="logout" ng-click="$ctrl.logout(); $ctrl.showLogout=true; $ctrl.loginButton=false; $ctrl.registerButton=false;"
+          ng-show="$ctrl.isLoggedIn">Logout</a>
 
-        <div id="loginForm">
-          <form ng-show="$ctrl.loginButton">
-            <label for="username">Username:</label>
-            <input type="text" ng-model="$ctrl.user.username">
-            <br>
-            <label for="password">Password:</label>
-            <input type="password" ng-model="$ctrl.user.password">
-            <br>
-            <a href="" class="navButtons animBtn themeA" id="submit" ng-click="$ctrl.login($ctrl.user); $ctrl.loginButton=false">Login</a>
-          </form>
+        <div class="auth-background" ng-show="$ctrl.loginButton || $ctrl.registerButton" ng-click="$ctrl.loginButton = false; $ctrl.registerButton = false;">
+          <div ng-click="$event.stopPropagation()" ng-show="$ctrl.loginButton" id="loginForm" class="authentification-forms">
+            <form>
+              <label for="username">Username:</label>
+              <input type="text" ng-model="$ctrl.user.username">
+              <br>
+              <label for="password">Password:</label>
+              <input type="password" ng-model="$ctrl.user.password">
+              <br>
+              <a href="" class="navButtons animBtn themeA" id="submit" ng-click="$ctrl.login($ctrl.user); $ctrl.loginButton=false">Login</a>
+            </form>
+          </div>
+
+          <div ng-click="$event.stopPropagation()" ng-show="$ctrl.registerButton" id="registerForm" class="authentification-forms">
+            <form>
+              <label for="password">Email:</label>
+              <input type="password" ng-model="$ctrl.newUser.email">
+              <br>
+              <label for="username">Username:</label>
+              <input type="text" ng-model="$ctrl.newUser.username">
+              <br>
+              <label for="password">Password:</label>
+              <input type="password" ng-model="$ctrl.newUser.password">
+              <br>
+              <a href="" class="navButtons animBtn themeA" id="submit" ng-click="$ctrl.register($ctrl.newUser); $ctrl.registerButton=false">Register</a>
+            </form>
+          </div>
         </div>
 
-        <div id="registerForm">
-          <form ng-show="$ctrl.registerButton">
-            <label for="username">Username:</label>
-            <input type="text" id="username" ng-model="$ctrl.newUser.username">
-            <br>
-            <label for="password">Password:</label>
-            <input type="password" id="password" ng-model="$ctrl.newUser.password">
-            <br>
-            <a href="" class="navButtons animBtn themeA" id="submit" ng-click="$ctrl.register($ctrl.newUser); $ctrl.registerButton=false">Register</a>
-          </form>
-        </div>
-      </div> <!-- Ends LogIn Nav -->
+      </div>
+      <!-- Ends LogIn Nav -->
     </header>
     <br>
-    <div ng-controller="tasksController">
+    <div ng-controller="tasksController as $ctrl">
       <div id="addNew">
         <form ng-show="show">
           <fieldset id="addNewForm">
             <p id="newTask">New Task</p>
             <input class="taskInput" type="text" id="Title" ng-model="newTask.title" placeholder="Task Title">
             <textarea rows="10" id="Description" ng-model="newTask.description" placeholder="Task Description"></textarea>
-            <input type="date" placeholder="Due Date" class="taskInput" id="dueDate" ng-model="newTask.dueDate"/>
+            <input type="date" placeholder="Due Date" class="taskInput" id="dueDate" ng-model="newTask.dueDate" />
             <div class="selectdiv">
               <select ng-model="newTask.priority" required>
                 <option selected value="">Select Priority</option>
@@ -73,18 +84,21 @@
                 <option value="completed">Completed</option>
               </select>
             </div>
-            <a href="" class="btn-ghost btn-white btn-align" ng-click="show=false; addTask(newTask)">Submit</a> <!-- SUBMIT BUTTON -->
+            <a href="" class="btn-ghost btn-white btn-align" ng-click="show=false; addTask(newTask)">Submit</a>
+            <!-- SUBMIT BUTTON -->
           </fieldset>
         </form>
-        <a href="" class="navButtons animBtnB themeB"  ng-click="checkLogin() ? show=true : show=false" ng-hide="show">Add Task</a> <!-- ADD TASK BUTTON -->
+        <a href="" class="navButtons animBtnB themeB" ng-click="checkLogin() ? show=true : show=false" ng-hide="show">Add Task</a>
+        <!-- ADD TASK BUTTON -->
       </div>
 
       <div id="board">
-        <div class= "statusWrap">
+        <div class="statusWrap">
           <h3 class="boardHeader" id="status1">Not Started</h3>
-          <div id="notStarted" dragula="'status-bag'"> <!-- Starts Not Started Section -->
+          <div id="notStarted" dragula="'status-bag'">
+            <!-- Starts Not Started Section -->
             <div class="CARD" ng-repeat="task in tasks | filter:status='notStarted' | orderBy: 'priority'">
-              <div class="INFO" ng-hide="showme" id="sideStatNotStarted" >
+              <div class="INFO" ng-hide="showme" id="sideStatNotStarted">
                 <p>Title: {{ task.title }}</p>
                 <p>Description: {{ task.description }}</p>
                 <p>Due Date: {{ task.dueDate }}</p>
@@ -92,20 +106,24 @@
               </div>
 
               <div class="changeOperators">
-                <button class="editButton updateButton" ng-click="editTask() ? showme=true : showme=false" ng-hide="showme"><i class="fa fa-lg fa-pencil" id="notStartedIcon"></i></button>
-                <button class="deleteButton updateButton" ng-click="showme=false; deleteTask(task)" ng-hide="showme"><i class="fa fa-lg fa-trash-o" aria-hidden="true" id="notStartedIcon"></i></button>
+                <button class="editButton updateButton" ng-click="editTask() ? showme=true : showme=false" ng-hide="showme">
+                  <i class="fa fa-lg fa-pencil" id="notStartedIcon"></i>
+                </button>
+                <button class="deleteButton updateButton" ng-click="showme=false; deleteTask(task)" ng-hide="showme">
+                  <i class="fa fa-lg fa-trash-o" aria-hidden="true" id="notStartedIcon"></i>
+                </button>
               </div>
               <!-- Hidden Edit Form -->
               <form class="nsEditForm" ng-show="showme">
                 <input type="hidden" ng-model="task.id">
                 <label for="title">Title:</label>
-                <input type="text" id="title" ng-model="task.title">
+                <input type="text" ng-model="task.title">
                 <br>
                 <label for="description">Description:</label>
-                <textarea id="description" row="10" ng-model="task.description"></textarea>
+                <textarea row="10" ng-model="task.description"></textarea>
                 <br>
                 <label for="dueDate">Due Date:</label>
-                <input type="date" id="dueDate" ng-model="task.dueDate">
+                <input type="date" ng-model="task.dueDate">
                 <br>
                 <label for="selectdiv">Priority:</label>
                 <div class="selectdiv">
@@ -118,18 +136,23 @@
                     <option value="5">5</option>
                   </select>
                 </div>
-                <input type="hidden" id="status" ng-model="task.status">
+                <input type="hidden" ng-model="task.status">
               </form>
               <div class="saveOperator">
-                <button class="saveButton updateButton" ng-click="showme=false; saveTask(task)" ng-show="showme"><i class="fa fa-lg fa-check" aria-hidden="true" id="notStartedIcon"></i></button>
+                <button class="saveButton updateButton" ng-click="showme=false; saveTask(task)" ng-show="showme">
+                  <i class="fa fa-lg fa-check" aria-hidden="true" id="notStartedIcon"></i>
+                </button>
               </div>
-            </div> <!-- card -->
-          </div> <!-- notstarted -->
+            </div>
+            <!-- card -->
+          </div>
+          <!-- notstarted -->
         </div>
 
-        <div class= "statusWrap">
+        <div class="statusWrap">
           <h3 class="boardHeader" id="status2">In Progress</h3>
-          <div id="inProgress" dragula="'status-bag'"> <!-- Starts Not Started Section -->
+          <div id="inProgress" dragula="'status-bag'">
+            <!-- Starts Not Started Section -->
             <div class="CARD" ng-repeat="task in tasks | filter:status='inProgress' | orderBy: 'priority'">
               <div class="INFO" id="sideStatProgress" ng-hide="showme">
                 <p>Title: {{ task.title }}</p>
@@ -139,38 +162,47 @@
               </div>
 
               <div class="changeOperators">
-                <button class="editButton updateButton" ng-click="editTask() ? showme=true : showme=false" ng-hide="showme"><i class="fa fa-lg fa-pencil" id="inProgressIcon"></i></button>
-                <button class="deleteButton updateButton" ng-click="showme=false; deleteTask(task)" ng-hide="showme"><i class="fa fa-lg fa-trash-o" aria-hidden="true" id="inProgressIcon"></i></button>
+                <button class="editButton updateButton" ng-click="editTask() ? showme=true : showme=false" ng-hide="showme">
+                  <i class="fa fa-lg fa-pencil" id="inProgressIcon"></i>
+                </button>
+                <button class="deleteButton updateButton" ng-click="showme=false; deleteTask(task)" ng-hide="showme">
+                  <i class="fa fa-lg fa-trash-o" aria-hidden="true" id="inProgressIcon"></i>
+                </button>
               </div>
               <!-- Hidden Edit Form -->
               <form class="ipEditForm" ng-show="showme">
-                <input type="hidden" id="{{ $index }}" ng-model="task.id">
+                <input type="hidden" ng-model="task.id">
                 <label for="title">Title:</label>
-                <input type="text" id="title" ng-model="task.title">
+                <input type="text" ng-model="task.title">
                 <br>
                 <label for="description">Description:</label>
-                <textarea id="description" row="10" ng-model="task.description"></textarea>
+                <textarea row="10" ng-model="task.description"></textarea>
                 <br>
                 <label for="dueDate">Due Date:</label>
-                <input type="text" id="dueDate" ng-model="task.dueDate">
+                <input type="text" ng-model="task.dueDate">
                 <br>
                 <label for="priority">Priority:</label>
-                <input type="text" id="priority" ng-model="task.priority">
+                <input type="text" ng-model="task.priority">
                 <br>
-                <input type="hidden" id="status" ng-model="task.status">
+                <input type="hidden" ng-model="task.status">
               </form>
               <div class="saveOperator">
-                <button class="saveButton updateButton" ng-click="showme=false; saveTask(task)" ng-show="showme"><i class="fa fa-lg fa-check" aria-hidden="true" id="inProgressIcon"></i></button>
+                <button class="saveButton updateButton" ng-click="showme=false; saveTask(task)" ng-show="showme">
+                  <i class="fa fa-lg fa-check" aria-hidden="true" id="inProgressIcon"></i>
+                </button>
               </div>
-            </div> <!-- card -->
-          </div> <!-- notstarted -->
+            </div>
+            <!-- card -->
+          </div>
+          <!-- notstarted -->
         </div>
 
-        <div class= "statusWrap">
-        <h3 class="boardHeader" id="status3">Completed</h3>
-          <div id="completed" dragula="'status-bag'"> <!-- Starts Not Started Section -->
+        <div class="statusWrap">
+          <h3 class="boardHeader" id="status3">Completed</h3>
+          <div id="completed" dragula="'status-bag'">
+            <!-- Starts Not Started Section -->
             <div class="CARD" ng-repeat="task in tasks | filter:status='completed' | orderBy: 'priority'">
-              <div class="INFO" ng-hide="showme" id="sideStatCompleted">
+              <div class="INFO" ng-hide="showme">
                 <p>Title: {{ task.title }}</p>
                 <p>Description: {{ task.description }}</p>
                 <p>Due Date: {{ task.dueDate }}</p>
@@ -178,37 +210,48 @@
               </div>
 
               <div class="changeOperators">
-                <button class="editButton updateButton" ng-click="editTask() ? showme=true : showme=false" ng-hide="showme"><i class="fa fa-lg fa-pencil" id="completedIcon"></i></button>
-                <button class="deleteButton updateButton" ng-click="showme=false; deleteTask(task)" ng-hide="showme"><i class="fa fa-lg fa-trash-o" aria-hidden="true" id="completedIcon"></i></button>
+                <button class="editButton updateButton" ng-click="editTask() ? showme=true : showme=false" ng-hide="showme">
+                  <i class="fa fa-lg fa-pencil" id="completedIcon"></i>
+                </button>
+                <button class="deleteButton updateButton" ng-click="showme=false; deleteTask(task)" ng-hide="showme">
+                  <i class="fa fa-lg fa-trash-o" aria-hidden="true" id="completedIcon"></i>
+                </button>
               </div>
 
               <!-- Hidden Edit Form -->
               <form class="INFO" ng-show="showme">
-                <input type="hidden" id="{{ $index }}" ng-model="task.id">
+                <input type="hidden" ng-model="task.id">
                 <label for="title">Title:</label>
-                <input type="text" id="title" ng-model="task.title">
+                <input type="text" ng-model="task.title">
                 <br>
                 <label for="description">Description:</label>
-                <input type="text" id="description" ng-model="task.description">
+                <input type="text" ng-model="task.description">
                 <br>
                 <label for="dueDate">Due Date:</label>
-                <input type="text" id="dueDate" ng-model="task.dueDate">
+                <input type="text" ng-model="task.dueDate">
                 <br>
                 <label for="priority">Priority:</label>
-                <input type="text" id="priority" ng-model="task.priority">
+                <input type="text" ng-model="task.priority">
                 <br>
-                <input type="hidden" id="status" ng-model="task.status">
+                <input type="hidden" ng-model="task.status">
               </form>
               <div class="saveOperator">
-                <button class="saveButton updateButton" ng-click="showme=false; saveTask(task)" ng-show="showme"><i class="fa fa-lg fa-check" aria-hidden="true" id="completedIcon"></i></button>
+                <button class="saveButton updateButton" ng-click="showme=false; saveTask(task)" ng-show="showme">
+                  <i class="fa fa-lg fa-check" aria-hidden="true" id="completedIcon"></i>
+                </button>
               </div>
-            </div> <!-- card -->
-          </div> <!-- notstarted -->
+            </div>
+            <!-- card -->
+          </div>
+          <!-- notstarted -->
         </div>
 
-      </div> <!-- Ends Board -->
-    </div> <!-- Ends Controller -->
-  </div> <!-- Ends Main -->
+      </div>
+      <!-- Ends Board -->
+    </div>
+    <!-- Ends Controller -->
+  </div>
+  <!-- Ends Main -->
 
 
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.5/angular.min.js"></script>
@@ -221,4 +264,5 @@
   <script type="text/javascript" src="/js/controllers/tasksController.js"></script>
   <script type="text/javascript" src="/js/controllers/loginController.js"></script>
 </body>
+
 </html>
