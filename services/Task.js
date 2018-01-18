@@ -19,6 +19,7 @@ class Task {
             status: eachTask.status
           });
         });
+        return tasksArr;
       });
   }
 }
