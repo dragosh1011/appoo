@@ -1,83 +1,82 @@
-(function () {
-  angular.module('app')
+class TaskService {
+  constructor($http) {
+    this.$http = $http;
+  }
 
-  //TASK SERVICE
-    .service('TaskService', ['$http', function($http){
+  getTasks() {
+    return this.$http.get('/api/tasks');
+  }
 
-      this.getTasks = function(){
-        return $http.get('/api/tasks');
+  addTask(task) {
+    return this.$http.post('/api/tasks', task);
+  }
+
+  saveTask(task) {
+    return this.$http.put('/api/tasks', task);
+  }
+
+  deleteTask(task) {
+    return this.$http({
+      url: '/api/tasks',
+      method: 'DELETE',
+      data: task,
+      headers: { "Content-Type": "application/json;charset=utf-8" }
+    });
+  }
+
+  updateStatus(updateObj) {
+    return $http.put('/api/status', updateObj);
+  }
+
+}
+
+class LoginService {
+  constructor($http) {
+    this.$http = $http;
+
+    this.isLoggedIn = false;
+  }
+
+  get() {
+    return this.isLoggedIn;
+  }
+
+  logout() {
+    return this.$http.get('/logout')
+      .then(() => {
+        this.isLoggedIn = false;
+      })
+  }
+
+  login(user) {
+    return this.$http({
+      url: '/login',
+      method: 'POST',
+      data: user,
+      headers: { "Content-Type": "application/json;charset=utf-8" }
+    }).then((response) => {
+      if (response.status === 200) {
+        this.isLoggedIn = true;
       };
-
-      this.addTask = function (task) {
-        return $http.post('/api/tasks', task);
+      if (response.status !== 200) {
+        console.log('ERROR');
       };
+    });
+  }
 
-      this.saveTask = function (task) {
-        return $http.put('/api/tasks', task);
-      };
+  register(user) {
+    return this.$http.post('/register', user)
+      .then((response) => {
+        if (response.status === 200) {
+          this.isLoggedIn = true;
+        };
+        if (response.status !== 200) {
+          console.log('ERROR');
+        };
+      });
+  }
+}
 
-      this.deleteTask = function(task){
-        return $http({
-          url: '/api/tasks',
-          method: 'DELETE',
-          data: task,
-          headers: {"Content-Type": "application/json;charset=utf-8"}
-        });
-      };
-
-      this.updateStatus = function(updateObj){
-        return $http.put('/api/status', updateObj);
-      }
-
-    }])
-
-  //LOGIN SERVICE
-    .service('LoginService', ['$http', function($http){
-
-      this.isLoggedIn = false;
-
-      this.get = function(){
-        return this.isLoggedIn;
-      }
-
-      this.logout = function(){
-        return $http.get('/logout')
-        .then(function(){
-          this.isLoggedIn = false;
-        })
-      };
-
-      this.login = function(user){
-        var self = this;
-        return $http({
-          url: '/login',
-          method: 'POST',
-          data: user,
-          headers: {"Content-Type": "application/json;charset=utf-8"}
-        }).then(function(response){
-          if (response.status === 200) {
-            self.isLoggedIn = true;
-          };
-          if (response.status !== 200) {
-            console.log('ERROR');
-          };
-        });
-      };
-
-      this.register = function(newUser){
-        var self = this;
-        return $http.post('/register', newUser)
-        .then(function(response){
-          if (response.status === 200) {
-            self.isLoggedIn = true;
-          };
-          if (response.status !== 200) {
-            console.log('ERROR');
-          };
-        });
-      };
-
-    }])
-
-
-})();
+angular.module('app')
+  .service('TaskService', ['$http', TaskService])
+  .service('LoginService', ['$http', LoginService])
