@@ -11,8 +11,8 @@ module.exports = {
       createdAt: new Date(),
       updatedAt: new Date(),
       UserId: 1
-     },
-     {
+    },
+    {
       title: 'liempa el techo',
       description: 'clean the roof',
       dueDate: "Saturday, May, 14",
@@ -21,8 +21,8 @@ module.exports = {
       createdAt: new Date(),
       updatedAt: new Date(),
       UserId: 1
-     },
-     {
+    },
+    {
       title: 'lava las trastes',
       description: 'wash the dishes',
       dueDate: "Saturday, May, 14",
@@ -30,8 +30,8 @@ module.exports = {
       status: 'completed',
       createdAt: new Date(),
       updatedAt: new Date(),
-       userId: 1
-     }
+      UserId: 1
+    }
     ], {});
   },
 
