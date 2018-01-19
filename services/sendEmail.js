@@ -31,7 +31,7 @@ module.exports = (email) => {
       to: email,
       from: mailConfig.auth.user,
       subject: 'Password reset',
-      html: getMessage(getLink(email, token))
+      html: getMessage(getLink(token))
     };
     return new Promise((resolve, reject) => {
       transporter.sendMail(mailOptions, (err, info) => {
@@ -54,6 +54,6 @@ If you did not request this, please ignore this email and your password will rem
 `
 }
 
-function getLink (email, token) {
-  return `${appLink}/?email=${email}&token=${token}`
+function getLink (token) {
+  return `${appLink}/?token=${token}`
 }

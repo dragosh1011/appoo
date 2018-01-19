@@ -38,9 +38,8 @@ module.exports = function registerRoutes(app) {
   });
 
   app.post('/reset-password', (req, res) => {
-    sendEmail(req.body.email).then(response => {
-      console.log(response);
-      res.send('Message was sent');
+    sendEmail(req.body.email).then(() => {
+      res.status(204).end();
     }).catch((error) => {
       res.send(error);
     });
@@ -71,7 +70,7 @@ module.exports = function registerRoutes(app) {
         })
       });
     }).then(() => {
-      res.send('Password was changed');
+      res.status(204).end();
     }).catch(error => {
       res.send(error);
     });
