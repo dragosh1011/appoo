@@ -11,7 +11,11 @@ class TasksController {
 
   $onInit() {
     this.TaskService.getTasks().then((response) => {
-      this.tasks = response.data.tasks;
+      this.tasks = response.data.tasks.map(task => {
+        task.dueDate = moment(task.dueDate, 'dddd, MMMM, DD').toDate();
+
+        return task;
+      });
     });
 
     this.$scope.$on('status-bag.drop', (error, element) => {
@@ -77,7 +81,9 @@ class TasksController {
       return alert("Please login to use this service");;
     }
 
-    this.TaskService.saveTask(task).success(function (response) {
+    task.dueDate = moment(task.dueDate, 'DD/MM/YYYY').format('dddd, MMMM, DD');
+
+    this.TaskService.saveTask(task).success((response) => {
       this.tasks = response.tasks;
     });
   };
