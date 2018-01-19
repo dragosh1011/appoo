@@ -4,7 +4,9 @@ const bcrypt = require('bcrypt'),
   db = require('../models'),
   Users = db.User,
   passport = require('passport');
-const sendEmail = require('../services/sendEmail')
+const sendEmail = require('../services/sendEmail');
+const InvalidTokenError = require('../errors/InvalidTokenError');
+const saltRounds = 10;
 
 module.exports = function registerRoutes(app) {
 
@@ -19,7 +21,6 @@ module.exports = function registerRoutes(app) {
   });
 
   app.post('/register', (req, res) => {
-    const saltRounds = 10;
     let pw = req.body.password;
     bcrypt.hash(pw, saltRounds, function (err, hash) {
       Users.create({
@@ -41,6 +42,37 @@ module.exports = function registerRoutes(app) {
       console.log(response);
       res.send('Message was sent');
     }).catch((error) => {
+      res.send(error);
+    });
+  });
+
+  app.post('/change-password', (req, res) => {
+    let pw = req.body.password;
+    Users.findOne({
+      where: {
+        resetPasswordToken: req.body.token,
+        resetPasswordExpires: {gte: Date.now()}
+      }
+    }).then(user => {
+      if (!user) {
+        throw new InvalidTokenError()
+      }
+
+      return new Promise((resolve, reject)=> {
+        bcrypt.hash(pw, saltRounds, function (err, hash) {
+          if (err) {
+            reject(err);
+          }
+
+          user.hash = hash;
+          user.resetPasswordToken = null;
+          user.resetPasswordExpires = null;
+          resolve(user.save());
+        })
+      });
+    }).then(() => {
+      res.send('Password was changed');
+    }).catch(error => {
       res.send(error);
     });
   });
