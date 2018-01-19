@@ -1,10 +1,18 @@
 'use strict';
 
-class Task {
-  constructor (model) {
+class TaskService {
+  /**
+   *
+   * @param model
+   */
+  constructor(model) {
     this._model = model
   }
 
+  /**
+   *
+   * @returns {Promise.<TResult>}
+   */
   findAll() {
     return this._model.findAll()
       .then((tasks) => {
@@ -23,6 +31,10 @@ class Task {
       });
   }
 
+  /**
+   *
+   * @param data
+   */
   create(data) {
     return this._model.create({
       title: data.title,
@@ -30,10 +42,14 @@ class Task {
       dueDate: data.dueDate,
       priority: data.priority,
       status: data.status
-    })
-
+    });
   }
 
+  /**
+   *
+   * @param data
+   * @returns {*|Promise.<Array.<affectedCount, affectedRows>>}
+   */
   update(data) {
     return this._model.update({
         title: data.title,
@@ -49,16 +65,27 @@ class Task {
       })
   }
 
+  /**
+   *
+   * @param title
+   * @param newStatus
+   * @returns {*|Promise.<Array.<affectedCount, affectedRows>>|*|Promise.<Array.<affectedCount, affectedRows>>}
+   */
   changeStatus(title, newStatus) {
     return this._model.update({
-      status : newStatus
+      status: newStatus
     }, {
-      where : {
-        title : title
+      where: {
+        title: title
       }
     })
   }
 
+  /**
+   *
+   * @param taskId
+   * @returns {*|Promise.<Integer>|Promise.<undefined>}
+   */
   delete(taskId) {
     return this._model.destroy({
       where: {
@@ -68,4 +95,4 @@ class Task {
   }
 }
 
-module.exports = Task;
+module.exports = TaskService;
