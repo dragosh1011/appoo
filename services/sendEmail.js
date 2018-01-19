@@ -55,5 +55,5 @@ If you did not request this, please ignore this email and your password will rem
 }
 
 function getLink (email, token) {
-  return `${appLink}/reset?email=${email}&token=${token}`
+  return `${appLink}/?email=${email}&token=${token}`
 }
