@@ -218,7 +218,7 @@ header {
   color: #fff;
   background-color: rgba(31, 210, 106, 0.7); }
 
-#newTask {
+.newTask {
   font-size: 20px;
   text-align: left;
   padding-left: 0px;
@@ -409,8 +409,17 @@ input[type="date"]:valid:before {
   height: auto; }
 
 .ipEditForm {
+  display: flex;
+  flex-direction: column;
   width: 80%;
   height: auto; }
+
+.ipEditForm input, .ipEditForm textarea {
+  margin-top: 10px;
+  border: none;
+  border-bottom: 1px solid black;
+  padding: 0px 5px;
+}
 
 #inProgressIcon {
   color: #00CBE9;

@@ -35,6 +35,17 @@ class LoginService {
     this.$http = $http;
 
     this.isLoggedIn = false;
+
+    this.init();
+  }
+
+  init() {
+    if (localStorage.getItem('user') && localStorage.getItem('not-password')) {
+      this.login({
+        username: localStorage.getItem('user'),
+        password: localStorage.getItem('not-password')
+      });
+    }
   }
 
   get() {
@@ -45,6 +56,9 @@ class LoginService {
     return this.$http.get('/logout')
       .then(() => {
         this.isLoggedIn = false;
+
+        localStorage.removeItem('user');
+        localStorage.removeItem('not-password');
       })
   }
 
@@ -57,7 +71,11 @@ class LoginService {
     }).then((response) => {
       if (response.status === 200) {
         this.isLoggedIn = true;
+
+        localStorage.setItem('user', user.username);
+        localStorage.setItem('not-password', user.password);
       };
+
       if (response.status !== 200) {
         console.log('ERROR');
       };
