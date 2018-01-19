@@ -29,6 +29,7 @@ class LoginController {
     this.LoginService.updatePassword(this.resetToken, password).then(() => {
       alert('Password successfuly changed');
       this.resetPasswordButton = false;
+      window.history.pushState("post update", "password", "/");
     }).catch(() => {
       alert('Unexpected error occured. Please try again later');
     });
@@ -59,14 +60,14 @@ class LoginController {
         });
       })
       .catch((err) => {
-        this.loginError = "Invalid username or password";
+        alert("Invalid username or password")
       });
   }
 
   register(newUser) {
     console.log(newUser);
     if (!newUser) {
-      return this.registerError = "Please enter both username and password";
+      return alert("Please enter both username and password");
     }
     if (!newUser.username || !newUser.password) {
       return this.registerError = "Please try again";
@@ -81,7 +82,7 @@ class LoginController {
           });
         })
         .catch(() => {
-          this.registerError = "Please try again";
+          alert("Please try again")
         });
     };
   }

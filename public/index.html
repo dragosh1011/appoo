@@ -24,7 +24,7 @@
         <a href="" class="navButtons animBtn themeA" id="logout" ng-click="$ctrl.logout(); $ctrl.showLogout=true; $ctrl.loginButton=false; $ctrl.registerButton=false;"
           ng-show="$ctrl.isLoggedIn">Logout</a>
 
-        <div class="auth-background" ng-show="$ctrl.loginButton || $ctrl.registerButton || $ctrl.resetButton || $ctrl.resetPasswordButton" ng-click="$ctrl.loginButton = false; $ctrl.registerButton = false; $ctrl.resetButton=false;">
+        <div class="auth-background" ng-show="$ctrl.loginButton || $ctrl.registerButton || $ctrl.resetButton || $ctrl.resetPasswordButton" ng-click="$ctrl.loginButton = false; $ctrl.registerButton = false; $ctrl.resetButton=false; $ctrl.resetPasswordButton = false;">
           <div ng-click="$event.stopPropagation()" ng-show="$ctrl.loginButton" id="loginForm" class="authentification-forms">
             <form>
               <label for="username">Username:</label>
