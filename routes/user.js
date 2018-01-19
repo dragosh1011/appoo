@@ -31,8 +31,8 @@ module.exports = function registerRoutes(app) {
         .then((user) => {
           return res.json(user);
         })
-        .catch((err) => {
-          return res.send(err);
+        .catch((error) => {
+          return sendErorr(error, res);
         });
     });
   });
@@ -41,7 +41,7 @@ module.exports = function registerRoutes(app) {
     sendEmail(req.body.email).then(() => {
       res.status(204).end();
     }).catch((error) => {
-      res.send(error);
+      sendErorr(error, res);
     });
   });
 
@@ -72,7 +72,14 @@ module.exports = function registerRoutes(app) {
     }).then(() => {
       res.status(204).end();
     }).catch(error => {
-      res.send(error);
+      sendErorr(error, res);
     });
   });
 };
+
+function sendErorr(error, res) {
+  if (error.code) {
+    res.status(error.code);
+  }
+  res.send(error);
+}
