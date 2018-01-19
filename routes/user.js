@@ -4,6 +4,7 @@ const bcrypt = require('bcrypt'),
   db = require('../models'),
   Users = db.User,
   passport = require('passport');
+const sendEmail = require('../services/sendEmail')
 
 module.exports = function registerRoutes(app) {
 
@@ -23,7 +24,8 @@ module.exports = function registerRoutes(app) {
     bcrypt.hash(pw, saltRounds, function (err, hash) {
       Users.create({
         username: req.body.username,
-        password: hash
+        password: hash,
+        email: req.body.email
       })
         .then((user) => {
           return res.json(user);
@@ -31,6 +33,15 @@ module.exports = function registerRoutes(app) {
         .catch((err) => {
           return res.send(err);
         });
+    });
+  });
+
+  app.post('/reset-password', (req, res) => {
+    sendEmail(req.body.email).then(response => {
+      console.log(response);
+      res.send('Message was sent');
+    }).catch((error) => {
+      res.send(error);
     });
   });
 };

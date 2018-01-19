@@ -26,12 +26,14 @@
     "express": "^4.13.4",
     "express-session": "^1.13.0",
     "moment": "^2.13.0",
+    "nodemailer": "^4.4.1",
     "nodemon": "^1.14.11",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",
     "pg": "^4.5.5",
     "pg-hstore": "^2.3.2",
-    "sequelize": "^3.22.0"
+    "sequelize": "^3.22.0",
+    "uuid": "^3.2.1"
   },
   "devDependencies": {
     "gulp": "^3.9.1",
