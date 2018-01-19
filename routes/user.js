@@ -63,7 +63,7 @@ module.exports = function registerRoutes(app) {
             reject(err);
           }
 
-          user.hash = hash;
+          user.password = hash;
           user.resetPasswordToken = null;
           user.resetPasswordExpires = null;
           resolve(user.save());
