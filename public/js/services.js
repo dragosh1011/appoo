@@ -93,6 +93,11 @@ class LoginService {
         };
       });
   }
+
+  resetPassword(email) {
+    console.log(email);
+    return this.$http.post('/reset-password', { email });
+  } 
 }
 
 angular.module('app')

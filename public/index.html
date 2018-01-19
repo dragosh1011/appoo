@@ -24,7 +24,7 @@
         <a href="" class="navButtons animBtn themeA" id="logout" ng-click="$ctrl.logout(); $ctrl.showLogout=true; $ctrl.loginButton=false; $ctrl.registerButton=false;"
           ng-show="$ctrl.isLoggedIn">Logout</a>
 
-        <div class="auth-background" ng-show="$ctrl.loginButton || $ctrl.registerButton" ng-click="$ctrl.loginButton = false; $ctrl.registerButton = false;">
+        <div class="auth-background" ng-show="$ctrl.loginButton || $ctrl.registerButton || $ctrl.resetButton" ng-click="$ctrl.loginButton = false; $ctrl.registerButton = false; $ctrl.resetButton=false;">
           <div ng-click="$event.stopPropagation()" ng-show="$ctrl.loginButton" id="loginForm" class="authentification-forms">
             <form>
               <label for="username">Username:</label>
@@ -33,6 +33,7 @@
               <label for="password">Password:</label>
               <input type="password" ng-model="$ctrl.user.password">
               <br>
+              <a href="" class="resetPassword" ng-click="$ctrl.loginButton = false; $ctrl.resetButton = true">Reset password</a>
               <a href="" class="navButtons animBtn themeA" id="submit" ng-click="$ctrl.login($ctrl.user); $ctrl.loginButton=false">Login</a>
             </form>
           </div>
@@ -49,6 +50,15 @@
               <input type="password" ng-model="$ctrl.newUser.password">
               <br>
               <a href="" class="navButtons animBtn themeA" id="submit" ng-click="$ctrl.register($ctrl.newUser); $ctrl.registerButton=false">Register</a>
+            </form>
+          </div>
+
+          <div ng-click="$event.stopPropagation()" ng-show="$ctrl.resetButton" id="registerForm" class="authentification-forms">
+            <form>
+              <label>Email:</label>
+              <input type="text" ng-model="email">
+              <br>
+              <a href="" class="navButtons animBtn themeA" id="submit" ng-click="$ctrl.resetPassword(email); $ctrl.resetButton=false">Reset</a>
             </form>
           </div>
         </div>
