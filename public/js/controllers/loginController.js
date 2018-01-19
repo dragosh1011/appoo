@@ -1,11 +1,47 @@
 'use strict';
 class LoginController {
-  constructor(LoginService) {
+  constructor(LoginService, $location) {
     this.LoginService = LoginService;
+    this.$location = $location;
 
-    this.loginButton = false; 
-    this.registerButton = false; 
-    this.resetButton=false;
+    this.loginButton = false;
+    this.registerButton = false;
+    this.resetButton = false;
+    this.resetPasswordButton = false;
+  }
+
+  $onInit() {
+    let token = this.getParameterByName('token');
+
+    if (!token) {
+      return false;
+    }
+    
+    this.resetPasswordButton = true;
+    this.resetToken = token;
+  }
+
+  updatePassword(password) {
+    if (!this.resetToken) {
+      return alert('Token is missing in your link');
+    }
+
+    this.LoginService.updatePassword(this.resetToken, password).then(() => {
+      alert('Password successfuly changed');
+      this.resetPasswordButton = false;
+    }).catch(() => {
+      alert('Unexpected error occured. Please try again later');
+    });
+  }
+
+  getParameterByName(name, url) {
+    if (!url) url = window.location.href;
+    name = name.replace(/[\[\]]/g, "\\$&");
+    var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+      results = regex.exec(url);
+    if (!results) return null;
+    if (!results[2]) return '';
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
   }
 
   logout() {
@@ -64,4 +100,4 @@ class LoginController {
 }
 
 angular.module('app')
-  .controller("LoginController", ['LoginService', LoginController]);
+  .controller("LoginController", ['LoginService', '$location', LoginController]);

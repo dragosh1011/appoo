@@ -48,6 +48,10 @@ class LoginService {
     }
   }
 
+  updatePassword(token, password) {
+    return this.$http.post('/change-password', { token, password });
+  }
+
   get() {
     return this.isLoggedIn;
   }
@@ -95,9 +99,8 @@ class LoginService {
   }
 
   resetPassword(email) {
-    console.log(email);
     return this.$http.post('/reset-password', { email });
-  } 
+  }
 }
 
 angular.module('app')

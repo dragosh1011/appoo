@@ -16,7 +16,7 @@
       <h1 id="mainHeading">Kanban Mega Project Board</h1>
       <div ng-controller="LoginController as $ctrl" class="loginNav">
         <div>{{$ctrl.loginError}}</div>
-        <a href="" class="navButtons animBtn themeA" id="logIn" ng-click="$ctrl.loginButton=true; $ctrl.registerButton=false; $ctrl.showLogout=false"
+        <a href="" class="navButtons animBtn themeA" id="logIn" ng-click="$ctrl.loginButton=true; $ctrl.registerButton=false; $ctrl.showLogout=false; $ctrl.resetPasswordButton=false"
           ng-show="!$ctrl.isLoggedIn">Log In</a>
         <div>{{$ctrl.registerError}}</div>
         <a href="" class="navButtons animBtn themeA" id="register" ng-click="$ctrl.showLogout=false; $ctrl.loginButton=false; $ctrl.registerButton=true;"
@@ -24,7 +24,7 @@
         <a href="" class="navButtons animBtn themeA" id="logout" ng-click="$ctrl.logout(); $ctrl.showLogout=true; $ctrl.loginButton=false; $ctrl.registerButton=false;"
           ng-show="$ctrl.isLoggedIn">Logout</a>
 
-        <div class="auth-background" ng-show="$ctrl.loginButton || $ctrl.registerButton || $ctrl.resetButton" ng-click="$ctrl.loginButton = false; $ctrl.registerButton = false; $ctrl.resetButton=false;">
+        <div class="auth-background" ng-show="$ctrl.loginButton || $ctrl.registerButton || $ctrl.resetButton || $ctrl.resetPasswordButton" ng-click="$ctrl.loginButton = false; $ctrl.registerButton = false; $ctrl.resetButton=false;">
           <div ng-click="$event.stopPropagation()" ng-show="$ctrl.loginButton" id="loginForm" class="authentification-forms">
             <form>
               <label for="username">Username:</label>
@@ -33,15 +33,15 @@
               <label for="password">Password:</label>
               <input type="password" ng-model="$ctrl.user.password">
               <br>
-              <a href="" class="resetPassword" ng-click="$ctrl.loginButton = false; $ctrl.resetButton = true">Reset password</a>
+              <a href="" class="resetPassword" ng-click="$ctrl.loginButton = false; $ctrl.resetButton = true;">Reset password</a>
               <a href="" class="navButtons animBtn themeA" id="submit" ng-click="$ctrl.login($ctrl.user); $ctrl.loginButton=false">Login</a>
             </form>
           </div>
 
           <div ng-click="$event.stopPropagation()" ng-show="$ctrl.registerButton" id="registerForm" class="authentification-forms">
             <form>
-              <label for="password">Email:</label>
-              <input type="password" ng-model="$ctrl.newUser.email">
+              <label>Email:</label>
+              <input type="text" ng-model="$ctrl.newUser.email">
               <br>
               <label for="username">Username:</label>
               <input type="text" ng-model="$ctrl.newUser.username">
@@ -59,6 +59,15 @@
               <input type="text" ng-model="email">
               <br>
               <a href="" class="navButtons animBtn themeA" id="submit" ng-click="$ctrl.resetPassword(email); $ctrl.resetButton=false">Reset</a>
+            </form>
+          </div>
+
+          <div ng-click="$event.stopPropagation()" ng-show="$ctrl.resetPasswordButton" id="registerForm" class="authentification-forms">
+            <form>
+              <label>New password:</label>
+              <input type="password" ng-model="password">
+              <br>
+              <a href="" class="navButtons animBtn themeA" id="submit" ng-click="$ctrl.updatePassword(password); $ctrl.resetPasswordButton=false">Update Password</a>
             </form>
           </div>
         </div>
