@@ -1,113 +1,106 @@
 'use strict';
+class TasksController {
+  constructor($scope, TaskService, dragulaService, LoginService) {
+    this.$scope = $scope;
+    this.TaskService = TaskService;
+    this.dragulaService = dragulaService;
+    this.LoginService = LoginService;
 
-(function(){
-  angular.module('app')
-  // .constant('moment', moment)
-  .controller('tasksController', ['$scope', 'TaskService', 'dragulaService', 'LoginService', function($scope, TaskService, dragulaService, LoginService){
+    this.tasks = [];
+  }
 
-  //Task Services
-
-    TaskService.getTasks().then(function(response) {
-      $scope.tasks = response.data.tasks;
+  $onInit() {
+    this.TaskService.getTasks().then((response) => {
+      this.tasks = response.data.tasks;
     });
 
-    $scope.checkLogin = function(){
-      if (LoginService.get() === false){
-        alert("Please login to use this service");
-        return false;
-      }
-      else {
-        return true;
-      }
-    }
+    this.$scope.$on('status-bag.drop', (error, element) => {
+      var status = element[0].parentNode.id;
+      var titleElement = element[0].querySelectorAll('p')[0];
+      var titleArr = titleElement.innerHTML.split(" ");
+      titleArr.shift();
+      var title = titleArr.join(' ');
+      var updateObj = {
+        title: title,
+        newStatus: status
+      };
 
-    $scope.addTask = function (task) {
-      console.log(task);
-      if (task === undefined){
-        alert("Please enter all task fields");
-      }
-      if (LoginService.get() === true){
-        if (task.title !== undefined ||
-        task.priority !== undefined ||
-        task.dueDate !== undefined) {
-          if (task.status === undefined){
-            task.status = notStarted;
-          }
-          task.dueDate = moment(task.dueDate).format('dddd, MMMM, DD');
-
-          TaskService.addTask(task).success(function (response) {
-             $scope.tasks = response.tasks;
-          })
-          .then(function(){
-            Object.assign(task, {
-            title: "",
-            description: "",
-            dueDate: "",
-            priority: "",
-            status: ""
-            });
-          });
-        }
-        else {
-          alert("Please enter all task fields");
-        }
-      }
-      if (LoginService.get() === false){
-        alert("Please log in to use this service");
-      }
-    };
-
-    $scope.saveTask = function (task) {
-      if (LoginService.get() === true){
-        TaskService.saveTask(task).success(function (response) {
-           $scope.tasks = response.tasks;
-        });
-      }
-      else {
-        alert("Please login to use this service");
-      }
-    };
-
-    $scope.editTask = function(){
-      if (LoginService.get() === false){
-        alert("Please login to use this service");
-        return false;
-      }
-      else {
-        return true;
-      }
-    }
-
-    $scope.deleteTask = function(task){
-      if (LoginService.get() === true){
-        TaskService.deleteTask(task).success(function(response){
-          $scope.tasks = response.tasks;
-        });
-      }
-      else {
-        alert("Please login to use this service");
-      }
-    };
-
-
-  //Dragula Services
-    $scope
-      .$on('status-bag.drop', function(error, element){
-        var status = element[0].parentNode.id;
-        var titleElement = element[0].querySelectorAll('p')[0];
-        var titleArr = titleElement.innerHTML.split(" ");
-        titleArr.shift();
-        var title = titleArr.join(' ');
-        var updateObj = {
-          title : title,
-          newStatus : status
-        };
-
-        TaskService.updateStatus(updateObj).success(function (response){
-          $scope.tasks = response.tasks;
-        });
+      this.TaskService.updateStatus(updateObj).success((response) => {
+        this.tasks = response.tasks;
       });
+    });
 
-  }])
+  }
 
-})();
+  checkLogin() {
+    if (!this.LoginService.get()) {
+      alert("Please login to use this service");
+    }
+
+    return this.LoginService.get();
+  }
+
+  addTask(task) {
+    if (task === undefined) {
+      return alert("Please enter all task fields");
+    }
+
+    if (!this.LoginService.get()) {
+      return alert("Please log in to use this service");
+    }
+
+    if (!task.title || !task.priority || !task.dueDate) {
+      return alert("Please enter all task fields");
+    }
+
+    if (!task.status) {
+      task.status = notStarted;
+    }
+
+    task.dueDate = moment(task.dueDate).format('dddd, MMMM, DD');
+
+    this.TaskService.addTask(task).success((response) => {
+      this.tasks = response.tasks;
+    }).then(() => {
+      Object.assign(task, {
+        title: "",
+        description: "",
+        dueDate: "",
+        priority: "",
+        status: ""
+      });
+    });
+  }
+
+  saveTask(task) {
+    if (!this.LoginService.get()) {
+      return alert("Please login to use this service");;
+    }
+
+    this.TaskService.saveTask(task).success(function (response) {
+      this.tasks = response.tasks;
+    });
+  };
+
+  editTask() {
+    if (!this.LoginService.get()) {
+      alert("Please login to use this service");
+    }
+
+    return this.LoginService.get();
+  }
+
+  deleteTask(task) {
+    if (!this.LoginService.get()) {
+      alert("Please login to use this service");
+    }
+
+    this.TaskService.deleteTask(task).success((response) => {
+      this.tasks = response.tasks;
+    });
+  };
+
+}
+
+angular.module('app')
+  .controller('tasksController', ['$scope', 'TaskService', 'dragulaService', 'LoginService', TasksController]);

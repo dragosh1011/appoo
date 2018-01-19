@@ -2,6 +2,10 @@
 class LoginController {
   constructor(LoginService) {
     this.LoginService = LoginService;
+
+    this.loginButton = false; 
+    this.registerButton = false; 
+    this.resetButton=false;
   }
 
   logout() {
@@ -44,6 +48,14 @@ class LoginController {
           this.registerError = "Please try again";
         });
     };
+  }
+
+  resetPassword(email) {
+    this.LoginService.resetPassword(email).then(() => {
+      alert('Password successful reseted, please check your email address.');
+    }).catch(() => {
+      alert('Unexpected error, please check your email address and try again.')
+    })
   }
 
   get isLoggedIn() {
